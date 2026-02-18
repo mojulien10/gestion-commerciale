@@ -26,7 +26,7 @@ Projet de mémoire de Licence 3 en Informatique.
 ## 📦 Installation
 ```bash
 # Cloner le projet
-git clone https://github.com/VOTRE-USERNAME/gestion-commerciale.git
+git clone https://github.com/mojulien10/gestion-commerciale.git
 
 # Installer les dépendances
 composer install
@@ -46,8 +46,8 @@ npm run dev
 
 ## 👤 Auteur
 
-**Votre Nom**  
-Étudiant en Licence 3 Informatique  
+**Mohamed Julien Niassy**  
+Étudiant en Licence 3 Informatique de gestion 
 Année 2025-2026
 
 ## 📄 Licence
