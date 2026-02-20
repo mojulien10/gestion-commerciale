@@ -62,6 +62,34 @@
                 <div class="stat-desc">XOF</div>
             </div>
         </div>
+        <!-- Barre de recherche -->
+<div class="card bg-base-100 shadow-xl mb-6">
+    <div class="card-body">
+        <form action="{{ route('clients.index') }}" method="GET" class="flex gap-2">
+            <input 
+                type="text" 
+                name="search" 
+                value="{{ $search ?? '' }}"
+                placeholder="🔍 Rechercher par nom, téléphone ou email..." 
+                class="input input-bordered flex-1"
+            />
+            <button type="submit" class="btn btn-primary">
+                Rechercher
+            </button>
+            @if($search ?? false)
+                <a href="{{ route('clients.index') }}" class="btn btn-ghost">
+                    Réinitialiser
+                </a>
+            @endif
+        </form>
+        
+        @if($search ?? false)
+            <div class="mt-2 text-sm text-base-content/60">
+                📊 {{ $clients->count() }} résultat(s) pour "<strong>{{ $search }}</strong>"
+            </div>
+        @endif
+    </div>
+</div>
 
         <!-- Tableau des clients -->
         <div class="card bg-base-100 shadow-xl">
@@ -80,57 +108,65 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($clients as $client)
-                                    <tr class="hover">
-                                        <td>
-                                            <div class="flex items-center space-x-3">
-                                                 <div class="avatar placeholder">
-    <div class="bg-primary text-primary-content rounded-full w-12 h-12 flex items-center justify-center">
-        <span class="text-xl font-bold">{{ strtoupper(substr($client->nom, 0, 1)) }}</span>
-    </div>
-</div>
-                                                </div>
-                                                <div>
-                                                    <div class="font-bold">{{ $client->nom }}</div>
-                                                    @if($client->adresse)
-                                                        <div class="text-sm opacity-50">{{ Str::limit($client->adresse, 30) }}</div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-ghost">{{ $client->telephone }}</span>
-                                        </td>
-                                        <td>
-                                            @if($client->email)
-                                                <span class="text-sm">{{ $client->email }}</span>
-                                            @else
-                                                <span class="text-sm opacity-50">N/A</span>
-                                            @endif
-                                        </td>
-                                       <td class="text-center">
-    <div class="badge badge-info badge-lg gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-        </svg>
-        {{ $client->nombre_achats }}
-    </div>
-</td>
-                                        <td class="text-right font-semibold">
-                                            {{ number_format($client->total_achats, 0, ',', ' ') }}
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="join">
-                                                <a href="{{ route('clients.show', $client->id) }}" class="btn btn-sm btn-ghost join-item" title="Voir">
-                                                    👁️
-                                                </a>
-                                                <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-sm btn-ghost join-item" title="Modifier">
-                                                    ✏️
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                            @foreach($clients as $client)
+    <tr class="hover">
+        <td>
+            <div class="flex items-center space-x-3">
+                <div class="avatar placeholder">
+                    <div class="bg-primary text-primary-content rounded-full w-12 h-12 flex items-center justify-center">
+                        <span class="text-xl font-bold">{{ strtoupper(substr($client->nom, 0, 1)) }}</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="font-bold">{{ $client->nom }}</div>
+                    @if($client->adresse)
+                        <div class="text-sm opacity-50">{{ Str::limit($client->adresse, 30) }}</div>
+                    @endif
+                </div>
+            </div>
+        </td>
+        <td>
+            <span class="badge badge-ghost">{{ $client->telephone }}</span>
+        </td>
+        <td>
+            @if($client->email)
+                <span class="text-sm">{{ $client->email }}</span>
+            @else
+                <span class="text-sm opacity-50">N/A</span>
+            @endif
+        </td>
+        <td class="text-center">
+            <div class="badge badge-info badge-lg gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                {{ $client->nombre_achats }}
+            </div>
+        </td>
+        
+        <td class="text-right font-semibold">
+            {{ number_format($client->total_achats, 0, ',', ' ') }}
+        </td>
+
+        <td class="text-center">
+            <div class="flex gap-1 items-center justify-center">
+                <a href="{{ route('clients.show', $client->id) }}" class="btn btn-sm btn-ghost btn-square" title="Voir">
+                    👁️
+                </a>
+                <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-sm btn-ghost btn-square" title="Modifier">
+                    ✏️
+                </a>
+                <form action="{{ route('clients.destroy', $client->id) }}" method="POST" onsubmit="return confirm('Supprimer {{ $client->nom }} ?');" class="inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-sm btn-ghost btn-square text-error" title="Supprimer">
+                        🗑️
+                    </button>
+                </form>
+            </div>
+        </td>
+    </tr>
+@endforeach
                             </tbody>
                         </table>
                     </div>
