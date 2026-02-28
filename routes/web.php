@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategorieController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,5 +23,7 @@ Route::middleware('auth')->group(function () {
 // Routes pour les clients
 Route::middleware(['auth'])->group(function () {
     Route::resource('clients', ClientController::class);
+    Route::resource('categories', CategorieController::class);
+    
 });
 require __DIR__.'/auth.php';
