@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -46,6 +45,14 @@ class Produit extends Model
     public function categorie()
     {
         return $this->belongsTo(Categorie::class);
+    }
+
+    /**
+     * Relation : Un produit a plusieurs mouvements de stock.
+     */
+    public function mouvementsStock()
+    {
+        return $this->hasMany(MouvementStock::class);
     }
 
     /**

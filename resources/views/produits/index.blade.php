@@ -74,22 +74,25 @@
             </div>
         </div>
 
-        <!-- Filtres par catégorie -->
-        <div class="card bg-base-100 shadow-xl border border-base-200 mb-6">
-            <div class="card-body p-4">
-                <div class="flex flex-wrap gap-2">
-                    <a href="{{ route('produits.index') }}" class="btn btn-sm {{ !request('categorie') ? 'btn-primary' : 'btn-ghost' }}">
-                        Toutes les catégories ({{ $produits->count() }})
-                    </a>
-                    @foreach($categories as $categorie)
-                        <a href="{{ route('produits.index', ['categorie' => $categorie->id]) }}" 
-                           class="btn btn-sm {{ request('categorie') == $categorie->id ? 'btn-primary' : 'btn-ghost' }}">
-                            {{ $categorie->nom }} ({{ $produits->where('categorie_id', $categorie->id)->count() }})
-                        </a>
-                    @endforeach
-                </div>
-            </div>
+       <!-- Filtres par catégorie -->
+<div class="card bg-base-100 shadow-xl border border-base-200 mb-6">
+    <div class="card-body p-4">
+        <div class="flex flex-wrap gap-2">
+            <a href="{{ route('produits.index') }}" class="btn btn-sm {{ !request('categorie') ? 'btn-primary' : 'btn-ghost' }}">
+                Toutes les catégories
+            </a>
+            @foreach($categories as $categorie)
+                @php
+                    $count = \App\Models\Produit::where('categorie_id', $categorie->id)->count();
+                @endphp
+                <a href="{{ route('produits.index', ['categorie' => $categorie->id]) }}" 
+                   class="btn btn-sm {{ request('categorie') == $categorie->id ? 'btn-primary' : 'btn-ghost' }}">
+                    {{ $categorie->nom }} ({{ $count }})
+                </a>
+            @endforeach
         </div>
+    </div>
+</div>
 
         <!-- Liste des produits -->
         @if($produits->count() > 0)
@@ -152,19 +155,23 @@
                                 </div>
                             </div>
 
-                            <!-- Actions -->
-                            <div class="card-actions justify-end">
-                                <a href="{{ route('produits.edit', $produit->id) }}" class="btn btn-sm btn-ghost" title="Modifier">
-                                    ✏️
-                                </a>
-                                <form action="{{ route('produits.destroy', $produit->id) }}" method="POST" onsubmit="return confirm('Supprimer ce produit ?');" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-ghost text-error" title="Supprimer">
-                                        🗑️
-                                    </button>
-                                </form>
-                            </div>
+                           
+<!-- Actions -->
+<div class="card-actions justify-end">
+    <a href="{{ route('produits.stock', $produit->id) }}" class="btn btn-sm btn-ghost" title="Gérer stock">
+        📦
+    </a>
+    <a href="{{ route('produits.edit', $produit->id) }}" class="btn btn-sm btn-ghost" title="Modifier">
+        ✏️
+    </a>
+    <form action="{{ route('produits.destroy', $produit->id) }}" method="POST" onsubmit="return confirm('Supprimer ce produit ?');" class="inline">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-sm btn-ghost text-error" title="Supprimer">
+            🗑️
+        </button>
+    </form>
+</div>
                         </div>
                     </div>
                 @endforeach

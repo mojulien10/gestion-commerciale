@@ -26,6 +26,9 @@ Route::middleware(['auth'])->group(function () {
 Route::resource('clients', ClientController::class);
 Route::resource('categories', CategorieController::class);
 Route::resource('produits', ProduitController::class);
+// Routes supplémentaires pour le stock
+    Route::get('/produits/{produit}/stock', [ProduitController::class, 'stock'])->name('produits.stock');
+    Route::post('/produits/{produit}/stock/ajuster', [ProduitController::class, 'ajusterStock'])->name('produits.ajuster');
     
 });
 require __DIR__.'/auth.php';

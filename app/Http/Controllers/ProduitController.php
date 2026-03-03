@@ -6,15 +6,28 @@ use Illuminate\Http\Request;
 use App\Models\Produit;
 use App\Models\Categorie;
 use Illuminate\Support\Str;
+use App\Services\StockService;
+use App\Models\MouvementStock;
 
 class ProduitController extends Controller
 {
-    /**
+   
+/**
  * Afficher la liste des produits.
  */
-public function index()
+public function index(Request $request)
 {
-    $produits = Produit::with('categorie')->orderBy('nom', 'asc')->get();
+    // Récupérer le filtre catégorie si présent
+    $categorieId = $request->input('categorie');
+    
+    // Construire la requête
+    $produits = Produit::with('categorie')
+        ->when($categorieId, function ($query, $categorieId) {
+            return $query->where('categorie_id', $categorieId);
+        })
+        ->orderBy('nom', 'asc')
+        ->get();
+    
     $categories = Categorie::all();
     
     return view('produits.index', compact('produits', 'categories'));
@@ -132,5 +145,42 @@ public function destroy($id)
     
     return redirect()->route('produits.index')
         ->with('success', 'Produit supprimé avec succès !');
+}
+/**
+ * Afficher la page de gestion du stock pour un produit.
+ */
+public function stock($id)
+{
+    $produit = Produit::with('categorie')->findOrFail($id);
+    $stockService = new StockService();
+    $mouvements = $stockService->historique($produit, 20);
+    
+    return view('produits.stock', compact('produit', 'mouvements'));
+}
+
+/**
+ * Ajuster le stock d'un produit.
+ */
+public function ajusterStock(Request $request, $id)
+{
+    $produit = Produit::findOrFail($id);
+    
+    $validated = $request->validate([
+        'nouveau_stock' => 'required|integer|min:0',
+        'motif' => 'required|string|max:255',
+    ]);
+    
+    try {
+        $stockService = new StockService();
+        $stockService->ajuster($produit, $validated['nouveau_stock'], $validated['motif']);
+        
+        return redirect()->route('produits.stock', $produit->id)
+            ->with('success', 'Stock ajusté avec succès !');
+            
+    } catch (\Exception $e) {
+        return redirect()->back()
+            ->with('error', 'Erreur : ' . $e->getMessage())
+            ->withInput();
+    }
 }
 }
