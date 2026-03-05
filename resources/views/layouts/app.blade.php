@@ -30,7 +30,8 @@
                             <li><a href="{{ route('clients.index') }}">👥 Clients</a></li>
                             <li><a href="{{ route('categories.index') }}">📁 Catégories</a></li>
                              <li><a href="{{ route('produits.index') }}">📦 Produits</a></li>
-                            <li><a>💰 Ventes</a></li>
+                             <li><a href="{{ route('ventes.index') }}">💰 Ventes</a></li>
+                            <!-- <li><a>💰 Ventes</a></li> -->
                             <li><a>📈 Rapports</a></li>
                         </ul>
                     </div>
@@ -45,7 +46,8 @@
                         <li><a href="{{ route('clients.index') }}" class="btn btn-ghost">👥 Clients</a></li>
                         <li><a href="{{ route('categories.index') }}" class="btn btn-ghost">📁 Catégories</a></li>
                         <li><a href="{{ route('produits.index') }}"class="btn btn-ghost">📦 Produits</a></li>
-                        <li><a class="btn btn-ghost">💰 Ventes</a></li>
+                        <li><a href="{{ route('ventes.index') }}" class="btn btn-ghost">💰 Ventes</a></li>
+                        <!-- <li><a class="btn btn-ghost">💰 Ventes</a></li> -->
                         <li><a class="btn btn-ghost">📈 Rapports</a></li>
                     </ul>
                 </div>

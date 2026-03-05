@@ -5,6 +5,7 @@ use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\VenteController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
 Route::resource('clients', ClientController::class);
 Route::resource('categories', CategorieController::class);
 Route::resource('produits', ProduitController::class);
+Route::resource('ventes', VenteController::class); 
 // Routes supplémentaires pour le stock
     Route::get('/produits/{produit}/stock', [ProduitController::class, 'stock'])->name('produits.stock');
     Route::post('/produits/{produit}/stock/ajuster', [ProduitController::class, 'ajusterStock'])->name('produits.ajuster');

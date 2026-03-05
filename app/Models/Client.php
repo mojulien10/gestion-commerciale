@@ -35,4 +35,11 @@ class Client extends Model
         'nombre_achats' => 'integer',
         'dernier_achat_le' => 'datetime',
     ];
+    /**
+ * Relation : Un client a plusieurs ventes.
+ */
+public function ventes()
+{
+    return $this->hasMany(Vente::class);
+}
 }
