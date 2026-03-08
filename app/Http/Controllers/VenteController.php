@@ -10,6 +10,7 @@ use App\Models\Produit;
 use App\Services\StockService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class VenteController extends Controller
 {
@@ -118,7 +119,10 @@ public function store(Request $request)
  */
 public function show(string $id)
 {
-    //
+    $vente = Vente::with(['client', 'user', 'lignesVente.produit'])
+        ->findOrFail($id);
+    
+    return view('ventes.show', compact('vente'));
 }
 
 /**
@@ -143,5 +147,17 @@ public function update(Request $request, string $id)
 public function destroy(string $id)
 {
     //
+}
+/**
+ * Générer la facture PDF.
+ */
+public function pdf($id)
+{
+    $vente = Vente::with(['client', 'user', 'lignesVente.produit.categorie'])
+        ->findOrFail($id);
+    
+    $pdf = Pdf::loadView('ventes.facture', compact('vente'));
+    
+    return $pdf->download('facture-' . $vente->numero_vente . '.pdf');
 }
 }

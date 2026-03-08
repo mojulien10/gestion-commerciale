@@ -139,16 +139,16 @@
                                                 <span class="badge badge-error badge-sm">✗ Annulée</span>
                                             @endif
                                         </td>
-                                        <td>
-                                            <div class="join join-horizontal">
-                                                <button class="btn btn-sm btn-ghost join-item" title="Détails">
-                                                    👁️
-                                                </button>
-                                                <button class="btn btn-sm btn-ghost join-item" title="Facture PDF">
-                                                    📄
-                                                </button>
-                                            </div>
-                                        </td>
+                                       <td>
+    <div class="join join-horizontal">
+        <a href="{{ route('ventes.show', $vente->id) }}" class="btn btn-sm btn-ghost join-item" title="Détails">
+            👁️
+        </a>
+        <a href="{{ route('ventes.pdf', $vente->id) }}" target="_blank" class="btn btn-sm btn-ghost join-item" title="Facture PDF">
+            📄
+        </a>
+    </div>
+</td>
                                     </tr>
                                 @endforeach
                             </tbody>

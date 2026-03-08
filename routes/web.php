@@ -31,6 +31,7 @@ Route::resource('ventes', VenteController::class);
 // Routes supplémentaires pour le stock
     Route::get('/produits/{produit}/stock', [ProduitController::class, 'stock'])->name('produits.stock');
     Route::post('/produits/{produit}/stock/ajuster', [ProduitController::class, 'ajusterStock'])->name('produits.ajuster');
-    
+    // Route pour générer la facture PDF
+    Route::get('/ventes/{vente}/pdf', [VenteController::class, 'pdf'])->name('ventes.pdf');
 });
 require __DIR__.'/auth.php';
