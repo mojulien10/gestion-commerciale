@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -53,6 +53,12 @@ class Produit extends Model
     public function mouvementsStock()
     {
         return $this->hasMany(MouvementStock::class);
+    }
+    /** Relation avec les lignes de vente
+     */
+    public function lignesVente(): HasMany
+    {
+        return $this->hasMany(LigneVente::class, 'produit_id');
     }
 
     /**
